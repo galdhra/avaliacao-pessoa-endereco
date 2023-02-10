@@ -5,18 +5,18 @@ import com.galdhra.Pessoa.entities.*;
 import java.time.*;
 import java.util.*;
 
-public class PersonDTO {
+public class PessoaDTO {
     private Long id;
     private String nome;
     private LocalDate dataDeNascimento;
 
     private List<EnderecoDTO> enderecos = new ArrayList<>();
 
-    public PersonDTO(){
+    public PessoaDTO(){
 
     }
 
-    public PersonDTO(Long id, String nome, LocalDate dataDeNascimento) {
+    public PessoaDTO(Long id, String nome, LocalDate dataDeNascimento) {
         this.id = id;
         this.nome = nome;
         this.dataDeNascimento = dataDeNascimento;
