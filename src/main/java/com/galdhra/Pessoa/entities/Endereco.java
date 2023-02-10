@@ -83,6 +83,14 @@ public class Endereco {
         this.cidade = cidade;
     }
 
+    public UnidadeFederativa getUF() {
+        return UF;
+    }
+
+    public void setUF(UnidadeFederativa UF) {
+        this.UF = UF;
+    }
+
     public Pessoa getMorador() {
         return morador;
     }
