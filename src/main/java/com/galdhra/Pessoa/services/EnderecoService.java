@@ -7,16 +7,20 @@ import com.galdhra.Pessoa.services.exceptions.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
+
 @Service
-public class PessoaService {
+public class EnderecoService {
 
     @Autowired
-    PessoaRepository repository;
+    EnderecoRepository repository;
 
     @Transactional(readOnly = true)
-    public PessoaDTO findById(Long id) {
-        Pessoa pessoa = repository.findById(id).orElseThrow(
+    public EnderecoDTO findById(Long id) {
+        Endereco endereco = repository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Recurso não encontrado"));
-        return new PessoaDTO(pessoa);
+        return new EnderecoDTO(endereco);
     }
+
+
+
 }
