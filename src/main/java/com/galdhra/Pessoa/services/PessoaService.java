@@ -5,6 +5,7 @@ import com.galdhra.Pessoa.entities.*;
 import com.galdhra.Pessoa.repositories.*;
 import com.galdhra.Pessoa.services.exceptions.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 @Service
@@ -14,9 +15,8 @@ public class PessoaService {
     PessoaRepository repository;
 
     @Transactional(readOnly = true)
-    public PessoaDTO findById(Long id) {
-        Pessoa pessoa = repository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Recurso não encontrado"));
-        return new PessoaDTO(pessoa);
+    public Page<PessoaDTO> findAll(String name, Pageable pageable) {
+        Page<Pessoa> result = repository.searchByName(name, pageable);
+        return result.map(x -> new PessoaDTO(x));
     }
 }
