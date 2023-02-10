@@ -14,7 +14,6 @@ public class Endereco {
     private Integer numero;
     private Boolean principal;
     private String cidade;
-
     private UnidadeFederativa UF;
 
     @ManyToOne
