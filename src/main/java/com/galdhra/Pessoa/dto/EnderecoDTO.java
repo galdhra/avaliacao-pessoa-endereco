@@ -1,21 +1,28 @@
-package com.galdhra.Pessoa.DTO;
+package com.galdhra.Pessoa.dto;
 
 import com.galdhra.Pessoa.entities.*;
-
+import jakarta.validation.constraints.*;
 public class EnderecoDTO {
 
     private Long id;
+    @Size(min = 3, max = 80, message="O nome deve ter entre 3 e 80 caracteres")
+    @NotBlank(message="Campo requerido")
     private String logradouro;
+    @Size(min=8, max=8, message= "O CEP é composto por 8 números")
+    @NotBlank(message="Campo requerido")
     private String cep;
+    @Positive
     private Integer numeroCasa;
+    @NotNull
     private Boolean enderecoPrincipal;
+    @Size(min = 3, max = 80, message="O nome da cidade deve ter entre 3 e 80 caracteres")
+    @NotBlank(message="Campo requerido")
     private String cidade;
+    @NotNull
     private UnidadeFederativa UF;
 
-    private Long moradorId;
 
-
-    public EnderecoDTO(Long id, String logradouro, String cep, Integer numeroCasa, Boolean enderecoPrincipal, String cidade, UnidadeFederativa UF, Long moradorId) {
+    public EnderecoDTO(Long id, String logradouro, String cep, Integer numeroCasa, Boolean enderecoPrincipal, String cidade, UnidadeFederativa UF) {
         this.id = id;
         this.logradouro = logradouro;
         this.cep = cep;
@@ -23,7 +30,6 @@ public class EnderecoDTO {
         this.enderecoPrincipal = enderecoPrincipal;
         this.cidade = cidade;
         this.UF = UF;
-        this.moradorId = moradorId;
     }
 
     public EnderecoDTO(Endereco entity) {
@@ -34,7 +40,6 @@ public class EnderecoDTO {
         enderecoPrincipal = entity.getEnderecoPrincipal();
         cidade = entity.getCidade();
         UF = entity.getUF();
-        moradorId = entity.getMorador().getId();
     }
 
     public Long getId() {
@@ -91,13 +96,5 @@ public class EnderecoDTO {
 
     public void setUF(UnidadeFederativa UF) {
         this.UF = UF;
-    }
-
-    public Long getMoradorId() {
-        return moradorId;
-    }
-
-    public void setMoradorId(Long moradorId) {
-        this.moradorId = moradorId;
     }
 }

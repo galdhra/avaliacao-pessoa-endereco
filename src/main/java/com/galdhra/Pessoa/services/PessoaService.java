@@ -1,15 +1,16 @@
 package com.galdhra.Pessoa.services;
 
-import com.galdhra.Pessoa.DTO.*;
+import com.galdhra.Pessoa.dto.*;
 import com.galdhra.Pessoa.entities.*;
 import com.galdhra.Pessoa.repositories.*;
+import com.galdhra.Pessoa.services.exceptions.*;
+import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 @Service
 public class PessoaService {
@@ -27,34 +28,43 @@ public class PessoaService {
 
     @Transactional(readOnly = true)
     public List<EnderecoDTO> findAllEnderecos(Long id) {
-        Optional<Pessoa> result = repository.findById(id);
+        Optional<Pessoa> result = Optional.ofNullable(repository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Recurso não encontrador")));
         List<Endereco> list = result.get().getEnderecos();
         return list.stream().map(x -> new EnderecoDTO(x)).toList();
     }
 
     @Transactional
     public PessoaDTO insert(PessoaDTO dto) {
-        Pessoa entity = new Pessoa();
-        copyDtoPessoa(dto, entity);
-        entity = repository.save(entity);
-        return new PessoaDTO(entity);
+            Pessoa entity = new Pessoa();
+            copyDtoPessoa(dto, entity);
+            entity = repository.save(entity);
+            return new PessoaDTO(entity);
 
     }
 
     @Transactional
     public PessoaDTO update(Long id, PessoaDTO dto) {
-        Pessoa entity = repository.getReferenceById(id);
-        copyDtoPessoa(dto, entity);
-        entity = repository.save(entity);
-        return new PessoaDTO(entity);
-    }
+        try{
+            Pessoa entity = repository.getReferenceById(id);
+            copyDtoPessoa(dto, entity);
+            entity = repository.save(entity);
+            return new PessoaDTO(entity);
+        }catch(EntityNotFoundException e){
+            throw new ResourceNotFoundException("Recurso não encontrado");
+        }
+        }
 
     @Transactional
     public PessoaDTO updateAddress(Long id, EnderecoDTO dto) {
-        Pessoa entity = repository.getReferenceById(id);
-        copyDtoToEntity(dto, entity);
-        entity = repository.save(entity);
-        return new PessoaDTO(entity);
+        try {
+            Pessoa entity = repository.getReferenceById(id);
+            copyDtoToEntity(dto, entity);
+            entity = repository.save(entity);
+            return new PessoaDTO(entity);
+        }catch(EntityNotFoundException e){
+        throw new ResourceNotFoundException("Recurso não encontrado");
+    }
     }
 
 

@@ -1,5 +1,7 @@
 package com.galdhra.Pessoa.entities;
 
+import jakarta.validation.*;
+
 public enum UnidadeFederativa {
 
     AMAZONAS,

@@ -1,13 +1,17 @@
-package com.galdhra.Pessoa.DTO;
+package com.galdhra.Pessoa.dto;
 
 import com.galdhra.Pessoa.entities.*;
+import jakarta.validation.constraints.*;
 
 import java.time.*;
 import java.util.*;
 
 public class PessoaDTO {
     private Long id;
+    @Size(min = 3, max = 80, message="Nome deve conter entre 3 e 80 caracteres")
+    @NotBlank(message="Campo requerido")
     private String nome;
+    @Past
     private LocalDate dataDeNascimento;
 
     private List<EnderecoDTO> enderecos = new ArrayList<>();
