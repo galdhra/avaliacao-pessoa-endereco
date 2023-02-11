@@ -7,30 +7,34 @@ public class EnderecoDTO {
     private Long id;
     private String logradouro;
     private String cep;
-    private Integer numero;
-    private Boolean principal;
+    private Integer numeroCasa;
+    private Boolean enderecoPrincipal;
     private String cidade;
     private UnidadeFederativa UF;
 
+    private Long moradorId;
 
-    public EnderecoDTO(Long id, String logradouro, String cep, Integer numero, Boolean principal, String cidade, UnidadeFederativa UF) {
+
+    public EnderecoDTO(Long id, String logradouro, String cep, Integer numeroCasa, Boolean enderecoPrincipal, String cidade, UnidadeFederativa UF, Long moradorId) {
         this.id = id;
         this.logradouro = logradouro;
         this.cep = cep;
-        this.numero = numero;
-        this.principal = principal;
+        this.numeroCasa = numeroCasa;
+        this.enderecoPrincipal = enderecoPrincipal;
         this.cidade = cidade;
         this.UF = UF;
+        this.moradorId = moradorId;
     }
 
     public EnderecoDTO(Endereco entity) {
         id = entity.getId();
         logradouro = entity.getLogradouro();
         cep = entity.getCep();
-        numero = entity.getNumero();
-        principal = entity.getPrincipal();
+        numeroCasa = entity.getNumeroCasa();
+        enderecoPrincipal = entity.getEnderecoPrincipal();
         cidade = entity.getCidade();
         UF = entity.getUF();
+        moradorId = entity.getMorador().getId();
     }
 
     public Long getId() {
@@ -57,20 +61,20 @@ public class EnderecoDTO {
         this.cep = cep;
     }
 
-    public Integer getNumero() {
-        return numero;
+    public Integer getNumeroCasa() {
+        return numeroCasa;
     }
 
-    public void setNumero(Integer numero) {
-        this.numero = numero;
+    public void setNumeroCasa(Integer numeroCasa) {
+        this.numeroCasa = numeroCasa;
     }
 
-    public Boolean getPrincipal() {
-        return principal;
+    public Boolean getEnderecoPrincipal() {
+        return enderecoPrincipal;
     }
 
-    public void setPrincipal(Boolean principal) {
-        this.principal = principal;
+    public void setEnderecoPrincipal(Boolean enderecoPrincipal) {
+        this.enderecoPrincipal = enderecoPrincipal;
     }
 
     public String getCidade() {
@@ -87,5 +91,13 @@ public class EnderecoDTO {
 
     public void setUF(UnidadeFederativa UF) {
         this.UF = UF;
+    }
+
+    public Long getMoradorId() {
+        return moradorId;
+    }
+
+    public void setMoradorId(Long moradorId) {
+        this.moradorId = moradorId;
     }
 }

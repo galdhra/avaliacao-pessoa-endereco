@@ -35,30 +35,40 @@ public class PessoaService {
     @Transactional
     public PessoaDTO insert(PessoaDTO dto) {
         Pessoa entity = new Pessoa();
-        copyDtoToEntity(dto, entity);
+        entity.setNome(dto.getNome());
+        entity.setDataDeNascimento(dto.getDataDeNascimento());
         entity = repository.save(entity);
         return new PessoaDTO(entity);
 
     }
 
+    @Transactional
+    public PessoaDTO update(Long id, PessoaDTO dto) {
+        Pessoa entity = repository.getReferenceById(id);
+        copyDtoToEntity(dto, entity);
+        entity = repository.save(entity);
+        return new PessoaDTO(entity);
+    }
+
 
     private void copyDtoToEntity(PessoaDTO dto, Pessoa entity) {
-        entity.setNome(dto.getNome());
-        entity.setDataDeNascimento(dto.getDataDeNascimento());
 
         for (EnderecoDTO endDto : dto.getEnderecos()) {
             Endereco endereco = new Endereco();
             endereco.setId(endDto.getId());
             endereco.setLogradouro(endDto.getLogradouro());
             endereco.setCep(endDto.getCep());
-            endereco.setNumero(endDto.getNumero());
-            if(endDto.getPrincipal() == true){
-                entity.getEnderecos().stream().filter(x-> x.getPrincipal()).map(x->false).collect(Collectors.toList());
-                endereco.setPrincipal(endDto.getPrincipal());
+            endereco.setNumeroCasa(endDto.getNumeroCasa());
+            if(endDto.getEnderecoPrincipal() == true){
+                entity.getEnderecos().stream().filter(x-> x.getEnderecoPrincipal()).map(x->false).collect(Collectors.toList());
+                endereco.setEnderecoPrincipal(endDto.getEnderecoPrincipal());
             }else {
-            endereco.setPrincipal(endDto.getPrincipal());}
+            endereco.setEnderecoPrincipal(endDto.getEnderecoPrincipal());}
             endereco.setCidade(endDto.getCidade());
             endereco.setUF(endDto.getUF());
+
+            Pessoa pessoa = repository.getReferenceById(endDto.getMoradorId());
+            endereco.setMorador(pessoa);
             entity.getEnderecos().add(endereco);
         }
 
