@@ -23,7 +23,7 @@ Pré-requisitos: Java 17
 git clone https://github.com/galdhra/avaliacao-pessoa-endereco
 
 # executar o projeto
-./mvnw spring-boot:run
+./mvn spring-boot:run
 ```
 
 # Autor
