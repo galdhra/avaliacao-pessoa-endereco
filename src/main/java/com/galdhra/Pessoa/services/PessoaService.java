@@ -9,6 +9,7 @@ import org.springframework.stereotype.*;
 import org.springframework.transaction.annotation.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 @Service
 public class PessoaService {
@@ -16,8 +17,7 @@ public class PessoaService {
     @Autowired
     PessoaRepository repository;
 
-    @Autowired
-    EnderecoService enderecoService;
+
 
     @Transactional(readOnly = true)
     public Page<PessoaDTO> findAll(String name, Pageable pageable) {
@@ -47,15 +47,18 @@ public class PessoaService {
         entity.setDataDeNascimento(dto.getDataDeNascimento());
 
         for (EnderecoDTO endDto : dto.getEnderecos()) {
-            EnderecoDTO end = enderecoService.update(endDto);
             Endereco endereco = new Endereco();
-            endereco.setId(end.getId());
-            endereco.setLogradouro(end.getLogradouro());
-            endereco.setCep(end.getCep());
-            endereco.setNumero(end.getNumero());
-            endereco.setPrincipal(end.getPrincipal());
-            endDto.setCidade(end.getCidade());
-            endDto.setUF(end.getUF());
+            endereco.setId(endDto.getId());
+            endereco.setLogradouro(endDto.getLogradouro());
+            endereco.setCep(endDto.getCep());
+            endereco.setNumero(endDto.getNumero());
+            if(endDto.getPrincipal() == true){
+                entity.getEnderecos().stream().filter(x-> x.getPrincipal()).map(x->false).collect(Collectors.toList());
+                endereco.setPrincipal(endDto.getPrincipal());
+            }else {
+            endereco.setPrincipal(endDto.getPrincipal());}
+            endereco.setCidade(endDto.getCidade());
+            endereco.setUF(endDto.getUF());
             entity.getEnderecos().add(endereco);
         }
 
