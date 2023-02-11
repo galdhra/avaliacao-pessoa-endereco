@@ -1,6 +1,7 @@
 package com.galdhra.Pessoa.controllers;
 
 import com.galdhra.Pessoa.DTO.*;
+import com.galdhra.Pessoa.entities.*;
 import com.galdhra.Pessoa.services.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
@@ -46,5 +47,11 @@ public class PessoaController {
     public ResponseEntity<PessoaDTO> update(@PathVariable Long id, @RequestBody PessoaDTO dto){
         dto = service.update(id,dto);
         return ResponseEntity.ok(dto);
+    }
+
+    @PutMapping(value = "/{id}/address")
+    public ResponseEntity<PessoaDTO> updateAddress(@PathVariable Long id, @RequestBody EnderecoDTO dto){
+        PessoaDTO pesDto = service.updateAddress(id,dto);
+        return ResponseEntity.ok(pesDto);
     }
 }

@@ -35,8 +35,7 @@ public class PessoaService {
     @Transactional
     public PessoaDTO insert(PessoaDTO dto) {
         Pessoa entity = new Pessoa();
-        entity.setNome(dto.getNome());
-        entity.setDataDeNascimento(dto.getDataDeNascimento());
+        copyDtoPessoa(dto, entity);
         entity = repository.save(entity);
         return new PessoaDTO(entity);
 
@@ -45,32 +44,44 @@ public class PessoaService {
     @Transactional
     public PessoaDTO update(Long id, PessoaDTO dto) {
         Pessoa entity = repository.getReferenceById(id);
+        copyDtoPessoa(dto, entity);
+        entity = repository.save(entity);
+        return new PessoaDTO(entity);
+    }
+
+    @Transactional
+    public PessoaDTO updateAddress(Long id, EnderecoDTO dto) {
+        Pessoa entity = repository.getReferenceById(id);
         copyDtoToEntity(dto, entity);
         entity = repository.save(entity);
         return new PessoaDTO(entity);
     }
 
 
-    private void copyDtoToEntity(PessoaDTO dto, Pessoa entity) {
+    private void copyDtoPessoa(PessoaDTO dto, Pessoa entity){
+        entity.setNome(dto.getNome());
+        entity.setDataDeNascimento(dto.getDataDeNascimento());
+    }
+    private void copyDtoToEntity(EnderecoDTO dto, Pessoa entity) {
 
-        for (EnderecoDTO endDto : dto.getEnderecos()) {
             Endereco endereco = new Endereco();
-            endereco.setId(endDto.getId());
-            endereco.setLogradouro(endDto.getLogradouro());
-            endereco.setCep(endDto.getCep());
-            endereco.setNumeroCasa(endDto.getNumeroCasa());
-            if(endDto.getEnderecoPrincipal() == true){
-                entity.getEnderecos().stream().filter(x-> x.getEnderecoPrincipal()).map(x->false).collect(Collectors.toList());
-                endereco.setEnderecoPrincipal(endDto.getEnderecoPrincipal());
-            }else {
-            endereco.setEnderecoPrincipal(endDto.getEnderecoPrincipal());}
-            endereco.setCidade(endDto.getCidade());
-            endereco.setUF(endDto.getUF());
+            endereco.setId(dto.getId());
+            endereco.setLogradouro(dto.getLogradouro());
+            endereco.setCep(dto.getCep());
+            endereco.setNumeroCasa(dto.getNumeroCasa());
 
-            Pessoa pessoa = repository.getReferenceById(endDto.getMoradorId());
-            endereco.setMorador(pessoa);
+            if(dto.getEnderecoPrincipal() == true){
+               entity.getEnderecos().stream().forEach(x -> x.setEnderecoPrincipal(false));
+               endereco.setEnderecoPrincipal(dto.getEnderecoPrincipal());
+            }else {
+            endereco.setEnderecoPrincipal(dto.getEnderecoPrincipal());
+            }
+
+            endereco.setCidade(dto.getCidade());
+            endereco.setUF(dto.getUF());
+            endereco.setMorador(entity);
             entity.getEnderecos().add(endereco);
         }
 
     }
-}
+
