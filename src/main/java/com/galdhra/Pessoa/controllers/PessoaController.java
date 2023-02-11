@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.*;
+
+import java.net.*;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/pessoa")
@@ -21,5 +25,19 @@ public class PessoaController {
             Pageable pageable){
         Page<PessoaDTO> dto = service.findAll(name, pageable);
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping(value = "/{id}/ends")
+    public ResponseEntity<List<EnderecoDTO>> findAllEnderecos(@PathVariable Long id){
+        List<EnderecoDTO> list = service.findAllEnderecos(id);
+        return ResponseEntity.ok(list);
+    }
+
+    @PostMapping
+    public ResponseEntity<PessoaDTO> insert(@RequestBody PessoaDTO dto){
+        dto = service.insert(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
     }
 }

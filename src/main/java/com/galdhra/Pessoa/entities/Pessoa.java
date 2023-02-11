@@ -16,7 +16,7 @@ public class Pessoa {
     private LocalDate dataDeNascimento;
 
 
-    @OneToMany(mappedBy = "morador",cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy = "morador",cascade=CascadeType.MERGE)
     private List<Endereco> enderecos = new ArrayList<>();
 
     public Pessoa(){

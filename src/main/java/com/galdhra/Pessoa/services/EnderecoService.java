@@ -23,4 +23,32 @@ public class EnderecoService {
 
 
 
+    @Transactional
+    public EnderecoDTO update(EnderecoDTO dto) {
+        Boolean yes = repository.consultaCep(dto.getCep()).isEmpty();
+        if(yes == true) {
+            Endereco entity = new Endereco();
+            copyDtoToEntity(dto, entity);
+            entity = repository.save(entity);
+            return new EnderecoDTO(entity);
+
+        }else{
+            Endereco entity = repository.getReferenceById(dto.getId());
+            return new EnderecoDTO(entity);
+        }
+    }
+
+
+
+    private void copyDtoToEntity(EnderecoDTO dto, Endereco entity) {
+        entity.setLogradouro(dto.getLogradouro());
+        entity.setCep(dto.getCep());
+        entity.setNumero(dto.getNumero());
+        entity.setPrincipal(dto.getPrincipal());
+        entity.setCidade(dto.getCidade());
+        entity.setUF(dto.getUF());
+    }
 }
+
+
+
